@@ -9,21 +9,21 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         HRProfiler Pipeline                                  │
+│                         HRProfiler Pipeline                                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│    VCFs (Mutect2)              Segments (ASCAT/FACETS/etc.)                │
+│    VCFs (Mutect2)              Segments (ASCAT/FACETS/etc.)                 │
 │         │                              │                                    │
 │         ▼                              ▼                                    │
-│   ┌──────────┐                  ┌──────────────┐                           │
-│   │FILTER_VCF│ (parallel)       │PREPARE_SEGS │ (parallel)                 │
-│   └────┬─────┘                  └──────┬───────┘                           │
+│   ┌──────────┐                  ┌──────────────┐                            │
+│   │FILTER_VCF│ (parallel)       │PREPARE_SEGS │ (parallel)                  │
+│   └────┬─────┘                  └──────┬───────┘                            │
 │        │                               │                                    │
-│        └───────────┬───────────────────┘                                   │
+│        └───────────┬───────────────────┘                                    │
 │                    │ collect()                                              │
 │                    ▼                                                        │
 │            ┌─────────────┐                                                  │
-│            │ HRPROFILER  │ (batch processing)                              │
+│            │ HRPROFILER  │ (batch processing)                               │
 │            └──────┬──────┘                                                  │
 │                   │                                                         │
 │                   ▼                                                         │
@@ -53,8 +53,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/florpio/hrprofiler-pipeline.git
-cd hrprofiler-pipeline
+git clone https://github.com/florpio/HRProfiler-workflow.git
+cd HRProfiler-workflow
 
 # Verify Nextflow installation
 nextflow -version
@@ -117,9 +117,8 @@ results/
 ├── hrprofiler/                       # HRProfiler results
 │   └── results_hrd/
 │       ├── output/
-│       │   ├── hrd_predictions_organ_*.txt  # ⭐ HRD predictions
+│       │   ├── hrd_predictions_organ_*.txt  # HRD predictions
 │       │   ├── hrd_probability_organ_*.pdf  # Probability plot
-│       │   └── *.matrix.tsv                 # Feature matrices
 │       └── logs/
 └── pipeline_info/
     └── hrd_analysis_software_versions.yml
@@ -139,13 +138,6 @@ The `hrd_predictions_organ_breast_model_type_wes.txt` file contains:
 | `LOH.1.40Mb` | LOH proportion |
 | `3-9:HET.10.40Mb`, `2-4:HET.40Mb` | CNV features |
 
-**Clinical interpretation:**
-
-| prediction | hrd.prob | Interpretation |
-|------------|----------|----------------|
-| **1** | ≥ 0.5 | **HRD+**: Potential candidate for PARP inhibitor therapy |
-| **0** | < 0.5 | **HRD-**: No evidence of HRD |
-| **0** | 0.3-0.5 | **Gray zone**: Consider other factors (BRCA mutations, etc.) |
 
 ## Docker Images
 
