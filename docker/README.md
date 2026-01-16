@@ -1,56 +1,56 @@
-# Docker Images para HRProfiler
+# Docker Images for HRProfiler
 
-## Imágenes disponibles
+## Available Images
 
-| Imagen | Tamaño | Descripción |
+| Image  | Size   | Description |
 |--------|--------|-------------|
-| `florpio/hrprofiler:1.0` | ~2GB | Imagen ligera, requiere montar genoma |
-| `florpio/hrprofiler:1.0-full` | ~20GB | Imagen completa con genoma GRCh38 incluido |
+| `florpio/hrprofiler:1.0` | ~2GB | Lightweight image, requires mounting genome |
+| `florpio/hrprofiler:1.0-full` | ~20GB | Full image with GRCh38 genome included |
 
-## Construcción
+## Build
 
 ```bash
 cd docker/
 
-# Imagen ligera (recomendada)
+# Lightweight image (recommended)
 ./build.sh --light
 
-# Imagen completa (incluye genoma, tarda ~1 hora)
+# Full image (includes genome, takes ~1 hour)
 ./build.sh --full
 
-# Ambas
+# Both
 ./build.sh --all
 
-# Probar
+# Test
 ./build.sh --test
 
-# Publicar a Docker Hub
+# Push to Docker Hub
 ./build.sh --push
 ```
 
-## Uso
+## Usage
 
-### Opción 1: Imagen ligera + Genoma montado (Recomendado)
+### Option 1: Lightweight Image + Mounted Genome (Recommended)
 
-Esta opción es más eficiente porque:
-- La imagen es pequeña (~2GB)
-- El genoma se descarga una sola vez en tu sistema
-- Múltiples containers pueden compartir el mismo genoma
+This option is more efficient because:
+- The image is small (~2GB)
+- The genome is downloaded only once on your system.
+- Multiple containers can share the same genome.
 
-**Paso 1: Descargar genoma (solo una vez)**
+**Step 1: Download genome (only once)**
 
 ```bash
-# Crear directorio para el genoma
+# Create directory for the genome
 mkdir -p ~/hrprofiler_genome
 
-# Descargar genoma usando el container
+# Download genome using the container
 docker run --rm \
     -v ~/hrprofiler_genome:/root/.SigProfilerMatrixGenerator \
     florpio/hrprofiler:1.0 \
     -c "from SigProfilerMatrixGenerator import install as genInstall; genInstall.install('GRCh38', rsync=False, bash=True)"
 ```
 
-**Paso 2: Ejecutar HRProfiler**
+**Step 2: Run HRProfiler**
 
 ```bash
 docker run --rm \
@@ -63,9 +63,9 @@ docker run --rm \
         --output-dir /data/results
 ```
 
-### Opción 2: Imagen completa
+### Option 2: Full Image
 
-Más simple pero la imagen es grande:
+Simpler, but the image is large:
 
 ```bash
 docker run --rm \
@@ -77,22 +77,22 @@ docker run --rm \
         --output-dir /data/results
 ```
 
-## Uso con Nextflow
+## Usage with Nextflow
 
-En `nextflow.config`:
+In `nextflow.config`:
 
 ```groovy
 process {
     withName: 'HRPROFILER' {
         container = 'florpio/hrprofiler:1.0'
         
-        // Montar genoma (si usas imagen ligera)
+        // Mount genome (if using lightweight image)
         containerOptions = '-v /path/to/genome:/root/.SigProfilerMatrixGenerator'
     }
 }
 ```
 
-O para la imagen completa:
+Or for the full image:
 
 ```groovy
 process {
@@ -102,13 +102,13 @@ process {
 }
 ```
 
-## Uso con Singularity
+## Usage with Singularity
 
 ```bash
-# Convertir imagen Docker a Singularity
+# Convert Docker image to Singularity
 singularity pull hrprofiler_1.0.sif docker://florpio/hrprofiler:1.0
 
-# Ejecutar
+# Run
 singularity exec \
     --bind ~/hrprofiler_genome:/root/.SigProfilerMatrixGenerator \
     --bind /path/to/data:/data \
@@ -116,13 +116,13 @@ singularity exec \
     python /data/HRD.py --snv-dir /data/snv --cnv-dir /data/cnv --output-dir /data/results
 ```
 
-## Verificar instalación
+## Verify Installation
 
 ```bash
-# Verificar dependencias
+# Verify dependencies
 docker run --rm florpio/hrprofiler:1.0 /opt/check_install.py
 
-# Output esperado:
+# Expected Output:
 # ✓ numpy 2.x.x
 # ✓ HRProfiler installed
 # ✓ SigProfilerMatrixGenerator installed
@@ -133,16 +133,16 @@ docker run --rm florpio/hrprofiler:1.0 /opt/check_install.py
 
 ### Error: Genome not found
 
-Si ves errores sobre genoma no encontrado:
+If you see errors about the genome not being found:
 
 ```
 FileNotFoundError: GRCh38 reference not installed
 ```
 
-Solución: Descargar el genoma o usar la imagen `-full`:
+Solution: Download the genome or use the`-full` image:
 
 ```bash
-# Descargar genoma
+# Download genome
 docker run --rm \
     -v ~/hrprofiler_genome:/root/.SigProfilerMatrixGenerator \
     florpio/hrprofiler:1.0 \
@@ -151,7 +151,7 @@ docker run --rm \
 
 ### Error: Permission denied
 
-Si hay problemas de permisos con volúmenes montados:
+If there are permission issues with mounted volumes:
 
 ```bash
 docker run --rm \
@@ -160,9 +160,9 @@ docker run --rm \
     florpio/hrprofiler:1.0 ...
 ```
 
-### Memoria insuficiente
+### Insufficient Memory
 
-HRProfiler puede necesitar bastante RAM. Aumentar límites:
+HRProfiler may need a lot of RAM. Increase limits:
 
 ```bash
 docker run --rm \
