@@ -11,7 +11,7 @@
 
 ## Introduction
 
-This pipeline analyzes tumor samples to determine their Homologous Recombination Deficiency (HRD) status. HRD is an important biomarker for selecting patients who may benefit from PARP inhibitor therapy (Olaparib, Niraparib, Rucaparib, Talazoparib).
+This pipeline analyzes tumor samples to determine their Homologous Recombination Deficiency (HRD) status. HRD is an important biomarker for selecting patients who may benefit from PARP inhibitor therapy.
 
 ### What do I need to run the pipeline?
 
