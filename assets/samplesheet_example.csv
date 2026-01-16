@@ -1,0 +1,4 @@
+sample,vcf,vcf_index,segments
+SAMPLE1_T01_vs_SAMPLE1_N01,/path/to/sample1.vcf.gz,/path/to/sample1.vcf.gz.tbi,/path/to/sample1.segments.txt
+SAMPLE2_T01_vs_SAMPLE2_N01,/path/to/sample2.vcf.gz,/path/to/sample2.vcf.gz.tbi,/path/to/sample2.segments.txt
+SAMPLE3_T01_vs_SAMPLE3_N01,/path/to/sample3.vcf.gz,/path/to/sample3.vcf.gz.tbi,/path/to/sample3.segments.txt

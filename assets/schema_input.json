@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/FlorPio/hrprofiler/main/assets/schema_input.json",
+    "title": "HRProfiler pipeline - samplesheet schema",
+    "description": "Schema for the samplesheet used in the HRProfiler pipeline",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "sample": {
+                "type": "string",
+                "description": "Sample identifier",
+                "pattern": "^[a-zA-Z0-9_-]+$"
+            },
+            "vcf": {
+                "type": "string",
+                "description": "Path to VCF file from Mutect2 (gzipped)",
+                "pattern": "^\\S+\\.vcf(\\.gz)?$"
+            },
+            "vcf_index": {
+                "type": "string",
+                "description": "Path to VCF index file (.tbi)",
+                "pattern": "^\\S+\\.tbi$"
+            },
+            "segments": {
+                "type": "string",
+                "description": "Path to segments file from ASCAT",
+                "pattern": "^\\S+\\.(txt|tsv|seg)$"
+            }
+        },
+        "required": ["sample", "vcf", "vcf_index", "segments"]
+    }
+}

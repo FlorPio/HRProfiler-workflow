@@ -1,0 +1,46 @@
+# Nextflow
+work/
+.nextflow/
+.nextflow.log*
+results/
+output/
+
+# Test data
+*.bam
+*.bai
+*.vcf.gz
+*.vcf.gz.tbi
+*.segments.txt
+
+# Keep example samplesheet but ignore real ones
+!assets/samplesheet_example.csv
+samplesheet*.csv
+!samplesheet_example.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Singularity
+*.sif
+*.img
+
+# Logs
+*.log
+*.err
+*.out
+
+# Temporary
+tmp/
+temp/
