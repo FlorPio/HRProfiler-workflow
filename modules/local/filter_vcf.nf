@@ -21,7 +21,7 @@ process FILTER_VCF {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     
-    // Filtros por defecto: PASS, DP>=10 en tumor, AF>=0.05 en tumor
+    // Default filters: PASS, tumor DP>=10, tumor AF>=0.05
     def min_dp = task.ext.min_dp ?: 10
     def min_af = task.ext.min_af ?: 0.05
     def filter_expr = task.ext.filter_expr ?: "FORMAT/AD[1:1]>=${min_dp} && FORMAT/AF[1:0]>=${min_af}"
