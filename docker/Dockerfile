@@ -1,5 +1,5 @@
 # =============================================================================
-# Dockerfile para HRProfiler
+# Dockerfile for HRProfiler
 # Imagen: florpio/hrprofiler:1.0
 # =============================================================================
 
@@ -9,12 +9,12 @@ LABEL maintainer="Flor Pio"
 LABEL description="HRProfiler for HRD analysis"
 LABEL version="1.0"
 
-# Evitar prompts interactivos
+# Avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Instalar dependencias del sistema
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     wget \
@@ -28,22 +28,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Crear directorio de trabajo
+# Create working directory
 WORKDIR /opt
 
-# Instalar dependencias Python base
+# Install base Python dependencies
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Instalar numpy primero (requerido por HRProfiler)
+# Install numpy first (required by HRProfiler)
 RUN pip install --no-cache-dir "numpy>=2.0.0"
 
-# Instalar SigProfilerMatrixGenerator (dependencia de HRProfiler)
+# Install SigProfilerMatrixGenerator (dependency of HRProfiler)
 RUN pip install --no-cache-dir SigProfilerMatrixGenerator
 
-# Instalar HRProfiler desde GitHub
+# Install HRProfiler from GitHub
 RUN pip install --no-cache-dir git+https://github.com/AlexandrovLab/HRProfiler.git@main
 
-# Instalar otras dependencias que pueda necesitar
+# Install other potential dependencies
 RUN pip install --no-cache-dir \
     pandas \
     matplotlib \
@@ -51,23 +51,23 @@ RUN pip install --no-cache-dir \
     scikit-learn
 
 # =============================================================================
-# NOTA SOBRE EL GENOMA GRCh38:
-# El genoma es ~15GB y tarda mucho en descargar durante el build.
-# Opciones:
-#   1. Descargarlo en el container (aumenta tamaño de imagen)
-#   2. Montarlo como volumen en runtime (recomendado para producción)
+# NOTE REGARDING GRCh38 GENOME:
+# The genome is ~15GB and takes a long time to download during the build.
+# Options:
+#   1. Download it into the container (increases image size)
+#   2. Mount it as a volume at runtime (recommended for production)
 #
-# Para incluirlo en la imagen (descomentar siguiente línea):
+# To include it in the image (uncomment the next line):
 # RUN python -c "from SigProfilerMatrixGenerator import install as genInstall; genInstall.install('GRCh38', rsync=False, bash=True)"
 #
-# Para montarlo en runtime, usar:
+# To mount it at runtime, use:
 # docker run -v /path/to/genome:/root/.SigProfilerMatrixGenerator florpio/hrprofiler:1.0
 # =============================================================================
 
-# Crear directorio para el genoma (se puede montar como volumen)
+# Create directory for the genome (can be mounted as a volume)
 RUN mkdir -p /root/.SigProfilerMatrixGenerator/references
 
-# Copiar script de verificación
+# Copy verification script
 COPY --chmod=755 <<EOF /opt/check_install.py
 #!/usr/bin/env python3
 """Verificar instalación de HRProfiler"""
@@ -107,12 +107,12 @@ if __name__ == "__main__":
     check()
 EOF
 
-# Verificar instalación
+# Verify installation
 RUN python /opt/check_install.py
 
-# Directorio de trabajo por defecto
+# Default working directory
 WORKDIR /data
 
-# NO usar ENTRYPOINT fijo - Nextflow necesita ejecutar bash
-# Para correr manualmente: docker run --rm florpio/hrprofiler:1.0 python script.py
+# DO NOT use a fixed ENTRYPOINT - Nextflow needs to execute bash
+# To run manually: docker run --rm florpio/hrprofiler:1.0 python script.py
 CMD ["/bin/bash"]
