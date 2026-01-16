@@ -2,7 +2,7 @@ process PREPARE_SEGMENTS {
     tag "${meta.id}"
     label 'process_single'
 
-    // Solo usa bash/awk, no necesita container específico
+    // Only uses bash/awk, no specific container needed
     conda "conda-forge::coreutils=9.1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/ubuntu:22.04' :
@@ -21,13 +21,13 @@ process PREPARE_SEGMENTS {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    # Convertir formato ASCAT a formato HRProfiler
+    # Convert ASCAT format to HRProfiler format
     # Input:  sample, chr, start, end, nMajor, nMinor (u otro formato)
     # Output: Sample, chr, startpos, endpos, total.copy.number.inTumour, nMajor, nMinor
     
     awk -v sample="${prefix}" 'BEGIN {OFS="\\t"} 
     NR==1 {
-        # Imprimir header esperado por HRProfiler
+        # Print header expected by HRProfiler
         print "Sample", "chr", "startpos", "endpos", "total.copy.number.inTumour", "nMajor", "nMinor"
     } 
     NR>1 {
