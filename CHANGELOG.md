@@ -39,12 +39,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docker ENTRYPOINT must use `CMD ["/bin/bash"]` not `ENTRYPOINT ["python"]`
 - Genome build with `--no-cache` required for full image
 
-## [Unreleased]
-
-### Planned Features
-
-- Singularity definition file for HPC environments
-- Integration with nf-core/sarek pipeline
-- Support for additional CNV callers
-- HTML report generation
-- MultiQC integration
