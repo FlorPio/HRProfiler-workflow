@@ -209,5 +209,5 @@ MIT License
 
 ## Contact
 
-- **Author**: Flor Pio
+- **Author**: Florencia Piovaroli
 - **GitHub**: [github.com/florpio](https://github.com/florpio)
